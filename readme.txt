@@ -1,36 +1,74 @@
-=== Plugin Name ===
-Contributors: VideoWhisper.com
-Tags: video, conference, streaming, chat, rooms, as3, flash, fms, red5, file sharing, audio, video chat, videochat, widget, plugin, media, av, files, page
+=== VideoWhisper Video Conference Integration ===
+Contributors: videowhisper, VideoWhisper.com
+Author: VideoWhisper.com
+Author URI: http://www.videowhisper.com
+Plugin Name: VideoWhisper Video Conference
+Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
+Donate link: http://www.videowhisper.com/?p=Invest
+Tags: video, conference, chat, webcam, BuddyPress, live, on air, flash, fms, red5, wowza, audio, video chat, videochat, widget, plugin, media, av, channel, sidebar, cam, group, groups, tab
 Requires at least: 2.7
-Tested up to: 2.7.1
-Stable tag: 1.0.2
+Tested up to: 3.0.1
+Stable tag: trunk
 
-VideoWhisper Video Conference is a modern multiple way video chat and real time file sharing tool. It can be used stand alone or integrated to existing sites.
+This Video Conferencing web based software can easily be used with WordPress sites to implement video conference for site users.
 
 == Description ==
+VideoWhisper Video Conference is a modern web based multiple way video chat and real time file sharing tool.
 
-Using latest AS3 technology VideoWhisper Video Conference provides better speed and stability compared to similar older software. Data (rooms, settings) and user interface (skins, icons, sounds) is loaded from external files that can be edited or replaced allowing webmasters and developers to easily customize the user experience.
+This plugin uses the WordPress username to login existing users. If the user is not logged into WordPress a warning message is shown and the visitor can click that to get back to the main WordPress website for registration/login. 
 
-This software is great for meetings, trainings, conferences, live events, recruiting, consultations, coaching and of course casual community chat.
-This brings people together instantly and without travel costs. These benefits open a wide range of new business opportunities and bring the extra value needed by established sites struggling to go ahead of their competitors.
+Includes a widget that displays active rooms (with number of participants) and conference access link.
+A Video Conference page is added to the website and can be disabled from settings.
+
+There is a settings page with multiple parameters and permissions (what users can access - all, only members, predefined list).
+
+BuddyPress integration: If BuddyPress is installed this will add a Video Conference tab to the group, where users can video chat realtime in group room.
+
+This software is great for meetings, trainings, conferences, live events, recruiting, consultations, coaching and of course casual community chat. This brings people together instantly and without travel costs. These benefits open a wide range of new business opportunities and bring the extra value needed by established sites struggling to go ahead of their competitors.
 
 == Installation ==
-
 * Before installing this make sure all hosting requirements are met: http://www.videowhisper.com/?p=Requirements
 * Install the RTMP application using these instructions: http://www.videowhisper.com/?p=RTMP+Applications
-* Copy the videowhisper_conference, wp-content folders and contents to your wordpress installation folder on your web server.
-* Fill your RTMP path into videowhisper_conference/settings.php .
-* Enable the plugin to add a link to it.
+* Copy this plugin folder to your wordpress installation in your plugins folder. You should obtain wp-content/plugins/videowhisper-video-conference-integration .
+* Enable the plugin from Wordpress admin area and fill the "Settings", including rtmp address there.
+* Enable the widget if you want to display active rooms (with number of participants) and conference access link. 
 
 == Screenshots ==
-1. Video Conference Screen. 
+1. Video Conference
+2. Video Conference Media Support
+3. Video Conference Menu
+
+== Desktop Sharing / Screen Broadcasting ==
+If your users want to broadcast their screen (when playing a game, using a program, tutoring various computer skills) they can do that easily just by using a screen sharing driver that simulates a webcam from desktop contents. Read more on http://www.videochat-scripts.com/screen-sharing-with-flash-video-chat-software/ . 
 
 == Documentation ==
-* Edition Homepage : http://www.videowhisper.com/?p=WordPress+Video+Conference
+* Plugin Homepage : http://www.videowhisper.com/?p=WordPress+Video+Conference
+* Application Homepage : http://www.videowhisper.com/?p=Video+Conference
 * Forum : http://www.videowhisper.com/forum.php?ftid=1&t=Video-Conference-software-videochat-chat
 
 == Demo ==
-* See it live on http://www.videochat-scripts.com/video-conference-plugin-for-wordpress-by-videowhisper/
+* See BuddyPress integration live on http://livon.tv/
+* See it live on http://www.videochat-scripts.com/video-conference/
 
 == Extra ==
-More information, the latest updates, other plugins and non-WordPress versions can be found at http://www.videowhisper.com/ .
+More information, the latest updates, other plugins and non-WordPress editions can be found at http://www.videowhisper.com/ .
+
+== Changelog ==
+= 3.1 =
+* BuddyPress integration: If BuddyPress is installed this will add a Video Conference tab to the group where users can video chat realtime in group room.
+
+= 3.0 =
+* Everything is in the plugin folder to allow automated updates.
+* Settings page to fill rtmp address.
+* Choose name to use in application (display name, login, nice name).
+* Access permissions (all, members, list).
+* List number of participants for each room.
+
+= 2.0 =
+* Compatibility updates.
+
+= 1.0.2=
+* Compatibility updates and widget.
+
+= 1.0 =
+* Plugin to integrate video conference installed in a videowhisper_conference folder on site root.
