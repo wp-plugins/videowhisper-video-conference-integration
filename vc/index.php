@@ -2,6 +2,8 @@
   $baseurl="";
   $swfurl=$baseurl."videowhisper_conference.swf?room=".$roomname;
   $bgcolor="#051e43";
+  
+  include("flash_detect.php");
 ?>
 <style type="text/css">
 <!--

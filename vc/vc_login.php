@@ -9,6 +9,14 @@ $userName =  $options['userName']; if (!$userName) $userName='user_nicename';
 $canAccess = $options['canAccess'];
 $accessList = $options['accessList'];
 
+$serverRTMFP = $options['serverRTMFP'];
+$p2pGroup = $options['p2pGroup'];
+$supportRTMP = $options['supportRTMP'];
+$supportP2P = $options['supportP2P'];
+$alwaystRTMP = $options['alwaystRTMP'];
+$alwaystP2P = $options['alwaystP2P'];
+$disableBandwidthDetection = $options['disableBandwidthDetection'];
+
 global $current_user;
 get_currentuserinfo();
 
@@ -62,8 +70,12 @@ $layoutCode=<<<layoutEND
 layoutEND;
 
 if ($_GET['room_name']) $room = $_GET['room_name'];
-if (!$room) $room="Lobby";
+if (!$room) 
+{
+$room=$username;
+$admin=1;
+}
 
 if (!$welcome) $welcome="Welcome to $room! <BR><font color=\"#3CA2DE\">&#187;</font> Click top left preview panel for more options including selecting different camera and microphone. <BR><font color=\"#3CA2DE\">&#187;</font> Click any participant from users list for more options including extra video panels. <BR><font color=\"#3CA2DE\">&#187;</font> Try pasting urls, youtube movie urls, picture urls, emails, twitter accounts as @videowhisper in your text chat. <BR><font color=\"#3CA2DE\">&#187;</font> Download daily chat logs from file list.";
 
-?>firstParam=fix&server=<?=$rtmp_server?>&serverAMF=<?=$rtmp_amf?>&username=<?=urlencode($username)?>&loggedin=<?=$loggedin?>&userType=<?=$userType?>&administrator=<?=$admin?>&room=<?=urlencode($room)?>&welcome=<?=urlencode($welcome)?>&userPicture=<?=$userPicture?>&userLink=<?=$userLink?>&webserver=&msg=<?=urlencode($msg)?>&tutorial=0&room_delete=0&room_create=0&file_upload=1&file_delete=1&panelFiles=1&showTimer=1&showCredit=1&disconnectOnTimeout=0&camWidth=320&camHeight=240&camFPS=15&micRate=11&camBandwidth=32768&bufferLive=0.5&bufferFull=0.5&bufferLivePlayback=0.2&bufferFullPlayback=0.5&showCamSettings=1&advancedCamSettings=1&camMaxBandwidth=81920&configureSource=0&disableVideo=0&disableSound=0&background_url=&autoViewCams=1&layoutCode=<?=urlencode($layoutCode)?>&fillWindow=0&filterRegex=<?=$filterRegex?>&filterReplace=<?=$filterReplace?>&loadstatus=1
+?>firstParam=fix&server=<?=$rtmp_server?>&serverAMF=<?=$rtmp_amf?>&serverRTMFP=<?=urlencode($serverRTMFP)?>&p2pGroup=<?=$p2pGroup?>&supportRTMP=<?=$supportRTMP?>&supportP2P=<?=$supportP2P?>&alwaysRTMP=<?=$alwaysRTMP?>&alwaysP2P=<?=$alwaysP2P?>&disableBandwidthDetection=<?=$disableBandwidthDetection?>&username=<?=urlencode($username)?>&loggedin=<?=$loggedin?>&userType=<?=$userType?>&administrator=<?=$admin?>&room=<?=urlencode($room)?>&welcome=<?=urlencode($welcome)?>&userPicture=<?=$userPicture?>&userLink=<?=$userLink?>&webserver=&msg=<?=urlencode($msg)?>&tutorial=0&room_delete=0&room_create=0&file_upload=1&file_delete=1&panelFiles=1&showTimer=1&showCredit=1&disconnectOnTimeout=0&camWidth=320&camHeight=240&camFPS=15&micRate=11&camBandwidth=32768&bufferLive=0.1&bufferFull=0.1&bufferLivePlayback=0.1&bufferFullPlayback=0.1&showCamSettings=1&advancedCamSettings=1&camMaxBandwidth=81920&configureSource=0&disableVideo=0&disableSound=0&background_url=&autoViewCams=1&layoutCode=<?=urlencode($layoutCode)?>&fillWindow=0&filterRegex=<?=$filterRegex?>&filterReplace=<?=$filterReplace?>&loadstatus=1

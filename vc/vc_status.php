@@ -8,32 +8,30 @@ ct=session time (in milliseconds)
 lt=last session time received from this script in (milliseconds)
 */
 
-$room=$_POST[r];
-$session=$_POST[s];
-$username=$_POST[u];
 
-$currentTime=$_POST[ct];
-$lastTime=$_POST[lt];
-$room=$_POST[r];
-$session=$_POST[s];
-$username=$_POST[u];
-$message=$_POST[m];
-$cam=$_POST[cam];
-$mic=$_POST[mic];
-
-$currentTime=$_POST[ct];
-$lastTime=$_POST[lt];
 
 include("../../../../wp-config.php");
 include("inc.php");
 
+$s=$_POST['s'];
+$u=$_POST['u'];
+$r=$_POST['r'];
+$m=$_POST['m'];
+	
+	//sanitize variables
+	include("incsan.php");
+	sanV($s);
+	sanV($u);
+	sanV($r);
+	sanV($m, 0, 0);
+
+	//exit if no valid session name or room name
+	if (!$s) exit;
+	if (!$r) exit;
+
 global $wpdb;
 $table_name = $wpdb->prefix . "vw_vcsessions";
 $wpdb->flush();
-
-	$s=$_POST['s'];
-	$u=$_POST['u'];
-	$r=$_POST['r'];
 
 	$ztime=time();
 
@@ -54,7 +52,13 @@ $wpdb->flush();
 	$sql="DELETE FROM `$table_name` WHERE edate < $exptime";
   $wpdb->query($sql);
 
-  
+
+$cam=$_POST[cam];
+$mic=$_POST[mic];
+
+$currentTime=$_POST[ct];
+$lastTime=$_POST[lt];
+
 $maximumSessionTime=0; //900000ms=15 minutes
 
 $disconnect=""; //anything else than "" will disconnect with that message

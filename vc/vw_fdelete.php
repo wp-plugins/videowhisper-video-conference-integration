@@ -1,6 +1,14 @@
 <?php
-if ( strstr($_GET["room"],"/") || strstr($_GET["room"],"..") || strstr($_GET["filename"],"/") || strstr($_GET["filename"],"..") ) exit;
-if (!$_GET["room"]||!$_GET["filename"]) exit;
-chmod("uploads/".$_GET["room"]."/".$_GET["filename"], 0766);
-unlink("uploads/".$_GET["room"]."/".$_GET["filename"]);
+
+$room = $_GET["room"];
+$filename = $_GET["filename"];
+
+include_once("incsan.php");
+sanV($room);
+if (!$room) exit;
+sanV($filename);
+if (!$filename) exit;
+
+chmod("uploads/$room/$filename", 0766);
+unlink("uploads/$room/$filename");
 ?>loadstatus=1

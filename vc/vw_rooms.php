@@ -3,7 +3,7 @@
 <room room_name="Fun" room_description="Haha!" user_number="0" capacity="50" />
 <room room_name="Hangout" room_description="Chill..." user_number="0" capacity="50" />
 <?php
-	$public_rooms=array("Lobby", "Fun", "Hangout");
+	    $public_rooms=array("Lobby", "Fun", "Hangout");
 
 		include("../../../../wp-config.php");
 

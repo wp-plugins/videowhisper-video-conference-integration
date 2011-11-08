@@ -1,8 +1,3 @@
 <?php
-include("header.php");
+	header("Location: /?Disconnected=" . urlencode($message));
 ?>
-<p>
-  <?=$_GET['message']?>
-
-
-</p>
