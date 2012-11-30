@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.72	
+Version: 4.72.2	
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -139,7 +139,7 @@ ENDCODE;
 		
 		$page_id = get_option("vw_vc_page");
 		if ($page_id > 0) $permalink = get_permalink( $page_id );		
-		else $permalink = $root_url . "wp-content/plugins/videowhisper-video-conference-integration/vc/";
+		else $permalink = $root_url . "wp-content/plugins/videowhisper-video-conference-integration/vc/?";
 			 
 		//clean recordings
 		$exptime=time()-30;
@@ -151,7 +151,7 @@ ENDCODE;
 		$items =  $wpdb->get_results("SELECT room, count(*) as users FROM `$table_name` where status='1' and type='1' GROUP BY room ORDER BY users DESC");
 
 		echo "<ul>";
-		if ($items)	foreach ($items as $item) echo "<li><B>".$item->room."</B> (" . $item->users .")</a></li>";
+		if ($items)	foreach ($items as $item) echo "<li><a href='".$root_url . "wp-content/plugins/videowhisper-video-conference-integration/vc/?roomname=" . $item->room . "'><B>" . $item->room . "</B></a> (" . $item->users .")</a></li>";
 		else echo "<li>No active conference rooms.</li>";
 		echo "</ul>";
 
@@ -185,6 +185,9 @@ ENDCODE;
 				'rtmp_amf' => 'AMF3',
 				'canAccess' => 'all',
 				'accessList' => '',
+
+			      'landingRoom' => 'lobby',
+ 			      'lobbyRoom' => 'Lobby',
 
 				'videoCodec'=>'H264',
 				'codecProfile' => 'main',
@@ -225,6 +228,9 @@ ENDCODE;
 				if (isset($_POST['userName'])) $options['userName'] = $_POST['userName'];
 				if (isset($_POST['canAccess'])) $options['canAccess'] = $_POST['canAccess'];
 				if (isset($_POST['accessList'])) $options['accessList'] = $_POST['accessList'];
+
+if (isset($_POST['landingRoom'])) $options['landingRoom'] = $_POST['landingRoom'];
+if (isset($_POST['lobbyRoom'])) $options['lobbyRoom'] = $_POST['lobbyRoom'];
 
 				if (isset($_POST['videoCodec'])) $options['videoCodec'] = $_POST['videoCodec'];
 				if (isset($_POST['codecProfile'])) $options['codecProfile'] = $_POST['codecProfile'];
@@ -342,15 +348,29 @@ ENDCODE;
   <option value="0" <?=$options['disablePage']=='0'?"selected":""?>>Yes</option>
   <option value="1" <?=$options['disablePage']=='1'?"selected":""?>>No</option>
 </select>
+
 <h5>Who can access video conference</h5>
 <select name="canAccess" id="canAccess">
   <option value="all" <?=$options['canAccess']=='all'?"selected":""?>>Anybody</option>
   <option value="members" <?=$options['canAccess']=='members'?"selected":""?>>All Members</option>
   <option value="list" <?=$options['canAccess']=='list'?"selected":""?>>Members in List</option>  
 </select>
+
 <h5>Members allowed to access video conference</h5>
 <textarea name="accessList" cols="64" rows="3" id="accessList"><?=$options['accessList']?>
 </textarea>
+
+<h5>Default landing room</h5>
+<select name="landingRoom" id="landingRoom">
+  <option value="lobby" <?=$options['landingRoom']=='lobby'?"selected":""?>>Lobby</option>
+  <option value="username" <?=$options['landingRoom']=='username'?"selected":""?>>Username</option></select>
+</select>
+
+<h5>Lobby room name</h5>
+<input name="lobbyRoom" type="text" id="lobbyRoom" size="16" maxlength="16" value="<?=$options['lobbyRoom']?>"/> (0-10)
+
+</textarea>
+
 <div class="submit">
   <input type="submit" name="updateSettings" id="updateSettings" value="<?php _e('Update Settings', 'VWvideoConference') ?>" />
 </div>

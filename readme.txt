@@ -59,9 +59,10 @@ More information, the latest updates, other plugins and non-WordPress editions c
 
 == Changelog ==
 
-= 4.72 =
+= 4.72.2 =
 * Integrated latest application version (v4.72)
 * Codec settings
+* Better room access, landing room setup
 
 = 4.51 =
 * Integrated latest application version (v4.51) that includes P2P. 

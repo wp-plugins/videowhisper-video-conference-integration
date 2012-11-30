@@ -1,4 +1,7 @@
 <?php
+  
+  $roomname = urlencode($_GET['roomname']);
+
   $baseurl="";
   $swfurl=$baseurl."videowhisper_conference.swf?room=".$roomname;
   $bgcolor="#051e43";

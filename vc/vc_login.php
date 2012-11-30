@@ -70,11 +70,18 @@ $layoutCode=<<<layoutEND
 layoutEND;
 
 if ($_GET['room_name']) $room = $_GET['room_name'];
-if (!$room) 
+if (!$room && !$visitor) 
 {
-$room=$username;
-$admin=1;
+	if ($options['landingRoom']=='username') 
+		{
+		$room=$username;
+		$admin=1;
+		}
+	else $room = $options['lobbyRoom'];
+
 }
+else $room = $options['lobbyRoom'];
+
 
 if (!$welcome) $welcome="Welcome to $room! <BR><font color=\"#3CA2DE\">&#187;</font> Click top left preview panel for more options including selecting different camera and microphone. <BR><font color=\"#3CA2DE\">&#187;</font> Click any participant from users list for more options including extra video panels. <BR><font color=\"#3CA2DE\">&#187;</font> Try pasting urls, youtube movie urls, picture urls, emails, twitter accounts as @videowhisper in your text chat. <BR><font color=\"#3CA2DE\">&#187;</font> Download daily chat logs from file list.";
 
