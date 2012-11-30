@@ -361,13 +361,17 @@ if (isset($_POST['lobbyRoom'])) $options['lobbyRoom'] = $_POST['lobbyRoom'];
 </textarea>
 
 <h5>Default landing room</h5>
+
 <select name="landingRoom" id="landingRoom">
   <option value="lobby" <?=$options['landingRoom']=='lobby'?"selected":""?>>Lobby</option>
-  <option value="username" <?=$options['landingRoom']=='username'?"selected":""?>>Username</option></select>
+  <option value="username" <?=$options['landingRoom']=='username'?"selected":""?>>Username</option>
+
 </select>
+  
+
 
 <h5>Lobby room name</h5>
-<input name="lobbyRoom" type="text" id="lobbyRoom" size="16" maxlength="16" value="<?=$options['lobbyRoom']?>"/> (0-10)
+<input name="lobbyRoom" type="text" id="lobbyRoom" size="16" maxlength="16" value="<?=$options['lobbyRoom']?>"/>Lobby room name
 
 </textarea>
 
