@@ -366,12 +366,12 @@ if (isset($_POST['lobbyRoom'])) $options['lobbyRoom'] = $_POST['lobbyRoom'];
   <option value="lobby" <?=$options['landingRoom']=='lobby'?"selected":""?>>Lobby</option>
   <option value="username" <?=$options['landingRoom']=='username'?"selected":""?>>Username</option>
 
-</select>
+</select>Username will allow registered users to start their own rooms
   
 
 
 <h5>Lobby room name</h5>
-<input name="lobbyRoom" type="text" id="lobbyRoom" size="16" maxlength="16" value="<?=$options['lobbyRoom']?>"/>Lobby room name
+<input name="lobbyRoom" type="text" id="lobbyRoom" size="16" maxlength="16" value="<?=$options['lobbyRoom']?>"/>Ex: Lobby
 
 </textarea>
 
