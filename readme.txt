@@ -59,7 +59,7 @@ More information, the latest updates, other plugins and non-WordPress editions c
 
 == Changelog ==
 
-= 4.72.2 =
+= 4.72.3 =
 * Integrated latest application version (v4.72)
 * Codec settings
 * Better room access, landing room setup
