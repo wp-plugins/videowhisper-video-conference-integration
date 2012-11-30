@@ -15,7 +15,7 @@ This Video Conferencing web based software can easily be used with WordPress sit
 == Description ==
 VideoWhisper Video Conference is a modern web based multiple way video chat and real time file sharing tool.
 
-Latest version includes P2P groups support for better, faster video streaming and lower rtmp server bandwidth usage.
+Latest version includes H264 and Speex support, acoustic echo cancellation, P2P groups support for better, faster video streaming and lower rtmp server bandwidth usage.
 
 This plugin uses the WordPress username to login existing users. If the user is not logged into WordPress a warning message is shown and the visitor can click that to get back to the main WordPress website for registration/login. 
 
@@ -58,6 +58,10 @@ If your users want to broadcast their screen (when playing a game, using a progr
 More information, the latest updates, other plugins and non-WordPress editions can be found at http://www.videowhisper.com/ .
 
 == Changelog ==
+
+= 4.72 =
+* Integrated latest application version (v4.72)
+* Codec settings
 
 = 4.51 =
 * Integrated latest application version (v4.51) that includes P2P. 
