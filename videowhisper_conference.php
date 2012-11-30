@@ -201,7 +201,7 @@ ENDCODE;
 				'p2pGroup' => 'VideoWhisper',
 				'supportRTMP' => '1',
 				'supportP2P' => '0',
-				'alwaysRTMP' => '0',
+				'alwaysRTMP' => '1',
 				'alwaysP2P' => '0',
 				'disableBandwidthDetection' => '0',
 				'videowhisper' => 0
