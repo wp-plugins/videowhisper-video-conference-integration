@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.51	
+Version: 4.72	
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -185,11 +185,19 @@ ENDCODE;
 				'rtmp_amf' => 'AMF3',
 				'canAccess' => 'all',
 				'accessList' => '',
+
+				'videoCodec'=>'H264',
+				'codecProfile' => 'main',
+				'codecLevel' => '3.1',
+				
+				'soundCodec'=> 'Speex',
+				'soundQuality' => '9',
+				'micRate' => '22',
 				
 				'serverRTMFP' => 'rtmfp://stratus.adobe.com/f1533cc06e4de4b56399b10d-1a624022ff71/',
 				'p2pGroup' => 'VideoWhisper',
 				'supportRTMP' => '1',
-				'supportP2P' => '1',
+				'supportP2P' => '0',
 				'alwaysRTMP' => '0',
 				'alwaysP2P' => '0',
 				'disableBandwidthDetection' => '0',
@@ -217,6 +225,15 @@ ENDCODE;
 				if (isset($_POST['userName'])) $options['userName'] = $_POST['userName'];
 				if (isset($_POST['canAccess'])) $options['canAccess'] = $_POST['canAccess'];
 				if (isset($_POST['accessList'])) $options['accessList'] = $_POST['accessList'];
+
+				if (isset($_POST['videoCodec'])) $options['videoCodec'] = $_POST['videoCodec'];
+				if (isset($_POST['codecProfile'])) $options['codecProfile'] = $_POST['codecProfile'];
+				if (isset($_POST['codecLevel'])) $options['codecLevel'] = $_POST['codecLevel'];
+				
+				if (isset($_POST['soundCodec'])) $options['soundCodec'] = $_POST['soundCodec'];
+				if (isset($_POST['soundQuality'])) $options['soundQuality'] = $_POST['soundQuality'];
+				if (isset($_POST['micRate'])) $options['micRate'] = $_POST['micRate'];
+
 				
 				if (isset($_POST['serverRTMFP'])) $options['serverRTMFP'] = $_POST['serverRTMFP'];
 				if (isset($_POST['p2pGroup'])) $options['p2pGroup'] = $_POST['p2pGroup'];
@@ -290,6 +307,33 @@ ENDCODE;
   <option value="0" <?=$options['alwaysP2P']?"":"selected"?>>No</option>
   <option value="1" <?=$options['alwaysP2P']?"selected":""?>>Yes</option>
 </select>
+
+<h5>Video Codec</h5>
+<select name="videoCodec" id="videoCodec">
+  <option value="H264" <?=$options['videoCodec']=='H264'?"selected":""?>>H264</option>
+  <option value="H263" <?=$options['videoCodec']=='H263'?"selected":""?>>H263</option>  
+</select>
+
+<h5>H264 Video Codec Profile</h5>
+<select name="codecProfile" id="codecProfile">
+  <option value="main" <?=$options['codecProfile']=='main'?"selected":""?>>main</option>
+  <option value="baseline" <?=$options['codecProfile']=='baseline'?"selected":""?>>baseline</option>  
+</select>
+
+<h5>H264 Video Codec Level</h5>
+<input name="codecLevel" type="text" id="codecLevel" size="32" maxlength="64" value="<?=$options['codecLevel']?>"/> (1, 1b, 1.1, 1.2, 1.3, 2, 2.1, 2.2, 3, 3.1, 3.2, 4, 4.1, 4.2, 5, 5.1)
+
+<h5>Sound Codec</h5>
+<select name="soundCodec" id="soundCodec">
+  <option value="Speex" <?=$options['soundCodec']=='Speex'?"selected":""?>>Speex</option>
+  <option value="Nellymoser" <?=$options['soundCodec']=='Nellymoser'?"selected":""?>>Nellymoser</option>  
+</select>
+
+<h5>Speex Sound Quality</h5>
+<input name="soundQuality" type="text" id="soundQuality" size="3" maxlength="3" value="<?=$options['soundQuality']?>"/> (0-10)
+
+<h5>Nellymoser Sound Rate</h5>
+<input name="micRate" type="text" id="micRate" size="3" maxlength="3" value="<?=$options['micRate']?>"/> (11/22/44)
 
 
 <h5>Disable Page</h5>

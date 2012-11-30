@@ -77,7 +77,7 @@ More information, the latest updates, other plugins and non-WordPress editions c
 = 2.0 =
 * Compatibility updates.
 
-= 1.0.2=
+= 1.0.2 =
 * Compatibility updates and widget.
 
 = 1.0 =
