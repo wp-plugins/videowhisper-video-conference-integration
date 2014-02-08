@@ -1,7 +1,11 @@
 <?php
   
-  $roomname = urlencode($_GET['roomname']);
-
+  $roomname = urlencode($_GET['r']);
+  if (!$roomname) $roomname = urlencode($_GET['roomname']);
+  
+  include_once("incsan.php");
+  sanV($roomname);
+   
   $baseurl="";
   $swfurl=$baseurl."videowhisper_conference.swf?room=".$roomname;
   $bgcolor="#051e43";

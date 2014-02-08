@@ -10,6 +10,7 @@ if (!$room) exit;
 sanV($filename);
 if (!$filename) exit;
 
+if (strstr($filename,'.php')) exit;
 
 //do not allow uploads to other folders
 if ( strstr($room,"/") || strstr($room,"..") ) exit;

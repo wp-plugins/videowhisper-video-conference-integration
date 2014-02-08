@@ -17,6 +17,12 @@ $alwaystRTMP = $options['alwaystRTMP'];
 $alwaystP2P = $options['alwaystP2P'];
 $disableBandwidthDetection = $options['disableBandwidthDetection'];
 
+$camRes = explode('x',$options['camResolution']);
+
+
+
+
+
 global $current_user;
 get_currentuserinfo();
 
@@ -24,17 +30,31 @@ get_currentuserinfo();
 if ($current_user->$userName) $username=urlencode($current_user->$userName);
 $username=preg_replace("/[^0-9a-zA-Z]/","-",$username);
 
+            //access keys
+            $userkeys = $current_user->roles;
+            $userkeys[] = $current_user->user_login;
+            $userkeys[] = $current_user->ID;
+            $userkeys[] = $current_user->user_email;
+            $userkeys[] = $current_user->display_name;
+            
 $loggedin=0;
 $msg="";
 
 //access permissions
-function inList($item, $data)
-{
-	$list=explode(",",$data);
-	foreach ($list as $listing) if ($item==trim($listing)) return 1;
-	return 0;
-}
+       function inList($keys, $data)
+        {
+            if (!$keys) return 0;
 
+            $list=explode(",", strtolower(trim($data)));
+
+            foreach ($keys as $key)
+                foreach ($list as $listing)
+                    if ( strtolower(trim($key)) == trim($listing) ) return 1;
+
+                    return 0;
+        }
+        
+        
 switch ($canAccess)
 {	
 	case "all":
@@ -47,13 +67,13 @@ switch ($canAccess)
 	break;
 	case "members":
 		if ($username) $loggedin=1;
-		else $msg=urlencode("<a href=\"/\">Please login first or register an account if you don't have one! Click here to return to website.</a>");
+		else $msg="<a href=\"/\">Please login first or register an account if you don't have one! Click here to return to website.</a>";
 	break;
 	case "list";
 		if ($username)
-			if (inList($username, $accessList)) $loggedin=1;
-			else $msg=urlencode("<a href=\"/\">$username, you are not in the video conference access list.</a>");
-		else $msg=urlencode("<a href=\"/\">Please login first or register an account if you don't have one! Click here to return to website.</a>");
+			if (inList($userkeys, $accessList)) $loggedin=1;
+			else $msg="<a href=\"/\">$username, you are not in the video conference access list.</a>";
+		else $msg="<a href=\"/\">Please login first or register an account if you don't have one! Click here to return to website.</a>";
 	break;
 }
 
@@ -65,12 +85,11 @@ $userLink=urlencode("http://www.videowhisper.com/");
 $filterRegex=urlencode("(?i)(fuck|cunt)(?-i)");
 $filterReplace=urlencode(" ** ");
 
-//fill your layout code between <<<layoutEND and layoutEND;
-$layoutCode=<<<layoutEND
-layoutEND;
-
-
+//room access
 if ($_GET['room_name']) $room = $_GET['room_name'];
+$room = sanitize_file_name($room);
+if ($room) setcookie('userRoom',$room);
+
 
 if (!$room && !$visitor) 
 {
@@ -90,8 +109,29 @@ if (!$room && !$visitor)
 }
  else if (!$room) $room = $options['lobbyRoom'];  //visitor can't create room
 
+if (!$options['anyRoom']) //room must exist
+if ($room != $options['lobbyRoom'] || $options['landingRoom'] !='lobby') //not lobby
+{
+			global $wpdb;           
+			$table_name = $wpdb->prefix . "vw_vcsessions";
+			$table_name3 = $wpdb->prefix . "vw_vcrooms";
+ 
+			$wpdb->flush();
+ 			$rm = $wpdb->get_row("SELECT count(id) as no FROM $table_name3 where name='$room'");
+ 			if (!$rm->no)
+ 			{
+	 			$msg="Room $room does not exist!";
+	 			$loggedin=0;
+ 			}
+}
+ 	
+//configure a picture to show when this user is clicked
+$userPicture = urlencode("uploads/_sessions/${username}_240.jpg");
+$avatarPicture = urlencode("uploads/_sessions/${username}_64.jpg");
+$userLink=urlencode("http://www.videowhisper.com/");
+$profileDetails = "Profile details for <i>$username</i><BR>Some html tags are supported (B I FONT IMG ...).";
 
 
-if (!$welcome) $welcome="Welcome to $room! <BR><font color=\"#3CA2DE\">&#187;</font> Click top left preview panel for more options including selecting different camera and microphone. <BR><font color=\"#3CA2DE\">&#187;</font> Click any participant from users list for more options including extra video panels. <BR><font color=\"#3CA2DE\">&#187;</font> Try pasting urls, youtube movie urls, picture urls, emails, twitter accounts as @videowhisper in your text chat. <BR><font color=\"#3CA2DE\">&#187;</font> Download daily chat logs from file list.";
+if (!$welcome) $welcome=html_entity_decode(stripslashes($options['welcome']));
 
-?>firstParam=fix&server=<?=$rtmp_server?>&serverAMF=<?=$rtmp_amf?>&serverRTMFP=<?=urlencode($serverRTMFP)?>&p2pGroup=<?=$p2pGroup?>&supportRTMP=<?=$supportRTMP?>&supportP2P=<?=$supportP2P?>&alwaysRTMP=<?=$alwaysRTMP?>&alwaysP2P=<?=$alwaysP2P?>&disableBandwidthDetection=<?=$disableBandwidthDetection?>&disableUploadDetection=<?=$disableBandwidthDetection?>&username=<?=urlencode($username)?>&loggedin=<?=$loggedin?>&userType=<?=$userType?>&administrator=<?=$admin?>&room=<?=urlencode($room)?>&welcome=<?=urlencode($welcome)?>&userPicture=<?=$userPicture?>&userLink=<?=$userLink?>&webserver=&msg=<?=urlencode($msg)?>&tutorial=0&room_delete=0&room_create=0&file_upload=1&file_delete=1&panelFiles=1&showTimer=1&showCredit=1&disconnectOnTimeout=0&camWidth=320&camHeight=240&camFPS=15&camBandwidth=32768&videoCodec=<?=$options['videoCodec']?>&codecProfile=<?=$options['codecProfile']?>&codecLevel=<?=$options['codecLevel']?>&soundCodec=<?=$options['soundCodec']?>&soundQuality=<?=$options['soundQuality']?>&micRate=<?=$options['micRate']?>&bufferLive=0.1&bufferFull=0.1&bufferLivePlayback=0.1&bufferFullPlayback=0.1&showCamSettings=1&advancedCamSettings=1&camMaxBandwidth=81920&configureSource=0&disableVideo=0&disableSound=0&background_url=&autoViewCams=1&layoutCode=<?=urlencode($layoutCode)?>&fillWindow=0&filterRegex=<?=$filterRegex?>&filterReplace=<?=$filterReplace?>&loadstatus=1
+?>firstParam=fix&server=<?=$rtmp_server?>&serverAMF=<?=$rtmp_amf?>&serverRTMFP=<?=urlencode($serverRTMFP)?>&p2pGroup=<?=$p2pGroup?>&supportRTMP=<?=$supportRTMP?>&supportP2P=<?=$supportP2P?>&alwaysRTMP=<?=$alwaysRTMP?>&alwaysP2P=<?=$alwaysP2P?>&disableBandwidthDetection=<?=$disableBandwidthDetection?>&disableUploadDetection=<?=$disableBandwidthDetection?>&username=<?=urlencode($username)?>&loggedin=<?=$loggedin?>&userType=<?=$userType?>&administrator=<?=$admin?>&room=<?=urlencode($room)?>&welcome=<?=urlencode($welcome)?>&userPicture=<?=$userPicture?>&userLink=<?=$userLink?>&webserver=&msg=<?=urlencode($msg)?>&room_delete=0&room_create=0&camWidth=<?php echo $camRes[0];?>&camHeight=<?php echo $camRes[1];?>&camFPS=<?php echo $options['camFPS']?>&camBandwidth=<?php echo $camBandwidth?>&videoCodec=<?=$options['videoCodec']?>&codecProfile=<?=$options['codecProfile']?>&codecLevel=<?=$options['codecLevel']?>&soundCodec=<?=$options['soundCodec']?>&soundQuality=<?=$options['soundQuality']?>&micRate=<?=$options['micRate']?>&camMaxBandwidth=<?php echo $camMaxBandwidth; ?>&layoutCode=<?=urlencode(html_entity_decode($options['layoutCode']))?>&fillWindow=0&filterRegex=<?=$filterRegex?>&filterReplace=<?=$filterReplace?>&avatarPicture=<?=$avatarPicture?>&profileDetails=<?=urlencode($profileDetails)?><?php echo html_entity_decode($options['parameters']); ?>&loadstatus=1
