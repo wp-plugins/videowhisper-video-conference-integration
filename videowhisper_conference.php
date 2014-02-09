@@ -254,7 +254,7 @@ function path2url($file, $Protocol='http://') {
 	<a href="http://www.macromedia.com/go/getflash/">Get Flash</a></strong>!</p>
 	</noscript>
 	</div>
-	<p><a href="$baseurl">Click here to video conference is a full page!</a></p>
+	<p><a href="$baseurl?r=$roomname">Click here to video conference is a full page!</a></p>
 ENDCODE;
 
 return $pagecode;
