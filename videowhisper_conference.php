@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.91	
+Version: 4.91.2	
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -236,7 +236,7 @@ function path2url($file, $Protocol='http://') {
         {
         
         $roomname = sanitize_file_name($_GET['r']);
-		if ($atts['room']) $roomname = sanitize_file_name($atts['room']);
+		if ($atts) if ($atts['room']) $roomname = sanitize_file_name($atts['room']);
 		
 		$baseurl = plugin_dir_url(__FILE__) .'vc/';
 			
