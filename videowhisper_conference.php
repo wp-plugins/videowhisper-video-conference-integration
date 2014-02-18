@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.91.2	
+Version: 4.91.3	
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -464,10 +464,56 @@ return $pagecode;
 			    'landingRoom' => 'lobby',
  			    'lobbyRoom' => 'Lobby',
  			    
- 			    'welcome' => htmlentities('Welcome to video conference room! <BR><font color="#3CA2DE">&#187;</font> Click top left preview panel for more options including selecting different camera and microphone. <BR><font color="#3CA2DE">&#187;</font> Click any participant from users list for more options including extra video panels. <BR><font color="#3CA2DE">&#187;</font> Try pasting urls, youtube movie urls, picture urls, emails, twitter accounts as @videowhisper in your text chat. <BR><font color="#3CA2DE">&#187;</font> Download daily chat logs from file list.'),
+ 			    'welcome' => 'Welcome to video conference room! <BR><font color="#3CA2DE">&#187;</font> Click top left preview panel for more options including selecting different camera and microphone. <BR><font color="#3CA2DE">&#187;</font> Click any participant from users list for more options including extra video panels. <BR><font color="#3CA2DE">&#187;</font> Try pasting urls, youtube movie urls, picture urls, emails, twitter accounts as @videowhisper in your text chat. <BR><font color="#3CA2DE">&#187;</font> Download daily chat logs from file list.',
  			    'layoutCode' => '',
- 			    'parameters' => htmlentities('&generateSnapshots=1&pushToTalk=1&publicVideosN=0&publicVideosW=225&publicVideosH=217&publicVideosX=2&publicVideosY=560&publicVideosColumns=4&publicVideosRows=0&avatarList=1&infoMenu=0&bufferLive=0.1&bufferFull=0.1&bufferLivePlayback=0.1&bufferFullPlayback=0.1&showCamSettings=1&advancedCamSettings=1&configureSource=0&disableVideo=0&disableSound=0&background_url=&autoViewCams=1&tutorial=0&file_upload=1&file_delete=1&panelFiles=1&showTimer=1&showCredit=1&disconnectOnTimeout=0&writeText=1&floodProtection=3&regularWatch=1&newWatch=1&privateTextchat=1&ws_ads=ads.php&adsTimeout=15000&adsInterval=0&statusInterval=10000&verboseLevel=2'),
+ 			    'parameters' => '&generateSnapshots=1&pushToTalk=1&publicVideosN=0&publicVideosW=225&publicVideosH=217&publicVideosX=2&publicVideosY=560&publicVideosColumns=4&publicVideosRows=0&avatarList=1&infoMenu=0&bufferLive=0.1&bufferFull=0.1&bufferLivePlayback=0.1&bufferFullPlayback=0.1&showCamSettings=1&advancedCamSettings=1&configureSource=0&disableVideo=0&disableSound=0&background_url=&autoViewCams=1&tutorial=0&file_upload=1&file_delete=1&panelFiles=1&showTimer=1&showCredit=1&disconnectOnTimeout=0&writeText=1&floodProtection=3&regularWatch=1&newWatch=1&privateTextchat=1&ws_ads=ads.php&adsTimeout=15000&adsInterval=0&statusInterval=10000&verboseLevel=2',
 
+ 				'translationCode' => '<t text="Sound Disabled" translation="Sound Disabled"/>
+<t text="Watch as Video 3" translation="Watch as Video 3"/>
+<t text="Full Screen" translation="Full Screen"/>
+<t text="P2P group subscribers" translation="P2P group subscribers"/>
+<t text="Change Volume" translation="Change Volume"/>
+<t text="Select Microphone Device" translation="Select Microphone Device"/>
+<t text="Apply Settings" translation="Apply Settings"/>
+<t text="Toggle Webcam" translation="Toggle Webcam"/>
+<t text="Select Webcam Device" translation="Select Webcam Device"/>
+<t text="Toggle Microphone" translation="Toggle Microphone"/>
+<t text="no" translation="no"/>
+<t text="Toggle External Encoder" translation="Toggle External Encoder"/>
+<t text="Toggle Preview Compression" translation="Toggle Preview Compression"/>
+<t text="Available" translation="Available"/>
+<t text="Username" translation="Username"/>
+<t text="Upload Files" translation="Upload Files"/>
+<t text="Upload" translation="Upload"/>
+<t text="Open" translation="Open"/>
+<t text="Send" translation="Send"/>
+<t text="Away" translation="Away"/>
+<t text="Bold" translation="Bold"/>
+<t text="Italic" translation="Italic"/>
+<t text="Busy" translation="Busy"/>
+<t text="Underline" translation="Underline"/>
+<t text="Delete" translation="Delete"/>
+<t text="Pause Broadcast" translation="Pause Broadcast"/>
+<t text="Sound Effects" translation="Sound Effects"/>
+<t text="Set Speaker" translation="Set Speaker"/>
+<t text="Sound Fx" translation="Sound Fx"/>
+<t text="Tune Streaming Bandwidth" translation="Tune Streaming Bandwidth"/>
+<t text="Emoticons" translation="Emoticons"/>
+<t text="Set Inquirer" translation="Set Inquirer"/>
+<t text="Push to Talk" translation="Push to Talk"/>
+<t text="Quality" translation="Quality"/>
+<t text="High" translation="High"/>
+<t text="Rooms" translation="Rooms"/>
+<t text="Kick" translation="Kick"/>
+<t text="SD" translation="SD"/>
+<t text="DVD NTSC" translation="DVD NTSC"/>
+<t text="Loaded application version: " translation="Loaded application version: "/>
+<t text="Block" translation="Block"/>
+<t text="Framerate" translation="Framerate"/>
+<t text="Rate" translation="Rate"/>
+<t text="DVD PAL" translation="DVD PAL"/>
+<t text="You are viewing room" translation="You are viewing room"/>
+',
                 'camResolution' => '320x240',
                 'camFPS' => '15',
 
@@ -681,9 +727,9 @@ This shortcode will display video conference room room-name. If room parameter i
             case 'integration':
             
    			$options['welcome'] = htmlentities(stripslashes($options['welcome']));
-			$options['layoutCode'] = htmlentities($options['layoutCode']);
-   			$options['parameters'] = htmlentities($options['parameters']);
-
+			$options['layoutCode'] = htmlentities(stripslashes($options['layoutCode']));
+   			$options['parameters'] = htmlentities(stripslashes($options['parameters']));
+   			$options['translationCode'] = htmlentities(stripslashes($options['translationCode']));
 
 ?>
 
@@ -702,7 +748,11 @@ This shortcode will display video conference room room-name. If room parameter i
 
 <h4>Custom Layout Code</h4>
 <textarea name="layoutCode" id="layoutCode" cols="64" rows="8"><?=$options['layoutCode']?></textarea>
-<br>Generate by writing and sending "/videowhisper layout" in chat (contains panel positions, sizes, move and resize toggles).
+<br>Generate by writing and sending "/videowhisper layout" in chat (contains panel positions, sizes, move and resize toggles). Copy and paste code here. 
+
+<h4>Translation Code</h4>
+<textarea name="translationCode" id="translationCode" cols="64" rows="8"><?=$options['translationCode']?></textarea>
+<br>Generate by writing and sending "/videowhisper translation" in chat (contains xml tags with text and translation attributes). Texts are added to list only after being shown once in interface. If any texts don't show up in generated list you can manually add new entries for these.
 
 <h4>Parameters</h4>
 <textarea name="parameters" id="parameters" cols="64" rows="8"><?=$options['parameters']?></textarea>
