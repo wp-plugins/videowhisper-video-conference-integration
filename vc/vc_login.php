@@ -1,6 +1,6 @@
 <?php
 
-include("../../../../wp-config.php");
+include("inc.php");
 
 $options = get_option('VWvideoConferenceOptions');
 $rtmp_server = $options['rtmp_server'];
@@ -36,7 +36,7 @@ $username=preg_replace("/[^0-9a-zA-Z]/","-",$username);
             $userkeys[] = $current_user->ID;
             $userkeys[] = $current_user->user_email;
             $userkeys[] = $current_user->display_name;
-            
+
 $loggedin=0;
 $msg="";
 
@@ -53,13 +53,13 @@ $msg="";
 
                     return 0;
         }
-        
-        
+
+
 switch ($canAccess)
-{	
+{
 	case "all":
 	$loggedin=1;
-	if (!$username) 
+	if (!$username)
 	{
 		$username="Guest".base_convert((time()-1224350000).rand(0,10),10,36);
 		$visitor=1; //ask for username
@@ -91,32 +91,34 @@ $room = sanitize_file_name($room);
 if ($room) setcookie('userRoom',$room);
 
 
-if (!$room && !$visitor) 
+if (!$room && !$visitor)
 {
-	
-	
-	if ($options['landingRoom']=='username') 
-	//can create	
+
+
+	if ($options['landingRoom']=='username')
+	//can create
 	{
-		
+
 	$room=$username;
 	$admin=1;
-		
+
 	}
-	
+
 	else $room = $options['lobbyRoom']; //or go to default
 
 }
  else if (!$room) $room = $options['lobbyRoom'];  //visitor can't create room
 
-if (!$options['anyRoom']) //room must exist
-if ($room != $options['lobbyRoom'] || $options['landingRoom'] !='lobby') //not lobby
-{
 			global $wpdb;           
 			$table_name = $wpdb->prefix . "vw_vcsessions";
 			$table_name3 = $wpdb->prefix . "vw_vcrooms";
- 
-			$wpdb->flush();
+ 			$wpdb->flush();
+
+
+if (!$options['anyRoom']) //room must exist
+if ($room != $options['lobbyRoom'] || $options['landingRoom'] !='lobby') //not lobby
+{
+
  			$rm = $wpdb->get_row("SELECT count(id) as no FROM $table_name3 where name='$room'");
  			if (!$rm->no)
  			{
@@ -124,7 +126,11 @@ if ($room != $options['lobbyRoom'] || $options['landingRoom'] !='lobby') //not l
 	 			$loggedin=0;
  			}
 }
- 	
+
+//room owner?
+$rm = $wpdb->get_row("SELECT owner FROM $table_name3 where name='$room'");
+if ($rm) if ($rm->owner == $current_user->ID) $admin=1;
+
 //configure a picture to show when this user is clicked
 $userPicture = urlencode("uploads/_sessions/${username}_240.jpg");
 $avatarPicture = urlencode("uploads/_sessions/${username}_64.jpg");

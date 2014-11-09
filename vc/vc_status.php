@@ -9,15 +9,17 @@ lt=last session time received from this script in (milliseconds)
 */
 
 
-
-include("../../../../wp-config.php");
-include("inc.php");
-
 $s=$_POST['s'];
 $u=$_POST['u'];
 $r=$_POST['r'];
 $m=$_POST['m'];
-	
+$cam=$_POST[cam];
+$mic=$_POST[mic];
+$currentTime=$_POST[ct];
+$lastTime=$_POST[lt];
+
+include("inc.php");
+
 	//sanitize variables
 	include("incsan.php");
 	sanV($s);
@@ -48,16 +50,25 @@ $wpdb->flush();
     $wpdb->query($sql);
 	}
 
-	$exptime=$ztime-30;
+	//do not clean more often than 25s (mysql table invalidate)
+	$lastClean = 0; $cleanNow = false;
+	$lastCleanFile = $options['uploadsPath'] . 'lastclean.txt';
+
+	if (file_exists($lastCleanFile)) $lastClean = file_get_contents($lastCleanFile);
+	if (!$lastClean) $cleanNow = true;
+	else if ($ztime - $lastClean > 25) $cleanNow = true;
+
+	if ($cleanNow)
+	{
+	if (!$options['onlineExpiration']) $options['onlineExpiration'] = 310;
+	$exptime=$ztime-$options['onlineExpiration'];
 	$sql="DELETE FROM `$table_name` WHERE edate < $exptime";
-  $wpdb->query($sql);
+	$wpdb->query($sql);
+	file_put_contents($lastCleanFile, $ztime);
+	}
 
 
-$cam=$_POST[cam];
-$mic=$_POST[mic];
 
-$currentTime=$_POST[ct];
-$lastTime=$_POST[lt];
 
 $maximumSessionTime=0; //900000ms=15 minutes
 
