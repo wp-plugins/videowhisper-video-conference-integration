@@ -53,6 +53,8 @@ Special **requirements**: This plugin has requirements beyond regular WordPress 
 == Desktop Sharing / Screen Broadcasting ==
 If your users want to broadcast their screen (when playing a game, using a program, tutoring various computer skills) they can do that easily just by using a screen sharing driver that simulates a webcam from desktop contents. Read more on http://www.videochat-scripts.com/screen-sharing-with-flash-video-chat-software/ .
 
+Resulting videos can be managed and imported with [Video Share VOD](http://wordpress.org/plugins/video-share-vod/  "Video Share / Video On Demand") WordPress Plugin .
+
 == Documentation ==
 * Plugin Homepage : http://www.videowhisper.com/?p=WordPress+Video+Conference
 * Application Homepage : http://www.videowhisper.com/?p=Video+Conference
