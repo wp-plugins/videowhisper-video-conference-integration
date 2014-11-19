@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.91.6
+Version: 4.91.7
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -419,8 +419,6 @@ ENDCODE;
 			*/
 
 
-
-
 	//clean expired users
 	//do not clean more often than 25s (mysql table invalidate)
 	$lastClean = 0; $cleanNow = false;
@@ -456,7 +454,8 @@ ENDCODE;
 	get_currentuserinfo();
 
 	//username
-	if ($current_user->$userName) $username=urlencode($current_user->$userName);
+	if ($userName) if ($current_user->$userName) $username=urlencode($current_user->$userName);
+	//var_dump($current_user->$userName);
 	$username=preg_replace("/[^0-9a-zA-Z]/","-",$username);
 
 	$room=$username;
@@ -465,7 +464,7 @@ ENDCODE;
 	else $room = $options['lobbyRoom']; //or go to default
 	$permalink = VWvideoConference::roomURL($room);
 
-			?><a href="<?php echo $permalink; ?>"><img src="<?php echo $root_url; ?>wp-content/plugins/videowhisper-video-conference-integration/vc/templates/conference/i_webcam.png" align="absmiddle" border="0">Enter Conference</a>
+			?><a href="<?php echo $permalink; ?>"><img src="<?php echo plugins_url(); ?>/videowhisper-video-conference-integration/vc/templates/conference/i_webcam.png" align="absmiddle" border="0">Enter Conference</a>
 	<?php
 			$state = 'block' ;
 			if (!$options['videowhisper']) $state = 'none';
