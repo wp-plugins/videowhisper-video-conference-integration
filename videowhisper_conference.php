@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.91.7
+Version: 4.91.8
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
@@ -46,7 +46,7 @@ if (!class_exists("VWvideoConference"))
 				add_action('wp_loaded', array('VWvideoConference','updatePages'));
 
 			//check db
-			$vw_dbvc_version = "2.0";
+			$vw_dbvc_version = "2.1";
 
 			global $wpdb;
 			$table_name = $wpdb->prefix . "vw_vcsessions";
@@ -83,6 +83,7 @@ if (!class_exists("VWvideoConference"))
 		  `owner` int(11) NOT NULL,
 		  `sdate` int(11) NOT NULL,
 		  `edate` int(11) NOT NULL,
+		  `capacity` int(11) NOT NULL,
 		  `status` tinyint(4) NOT NULL,
 		  `type` tinyint(4) NOT NULL,
 		  PRIMARY KEY  (`id`),
@@ -92,7 +93,7 @@ if (!class_exists("VWvideoConference"))
 		  KEY `owner` (`owner`)
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Video Whisper: Rooms - 2014@videowhisper.com' AUTO_INCREMENT=1 ;
 
-		INSERT INTO `$table_name3` ( `name`, `owner`, `sdate`, `edate`, `status`, `type`) VALUES ( 'Lobby', '1', NOW(), NOW(), '1', '1');
+		INSERT INTO `$table_name3` ( `name`, `owner`, `sdate`, `edate`, `capacity`, `status`, `type`) VALUES ( 'Lobby', '1', NOW(), NOW(), '100' ,'1', '1');
 		";
 
 				require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -334,7 +335,6 @@ ENDCODE;
 				$room = sanitize_file_name($_POST['room']);
 				if ($room)
 				{
-
 					$ztime=time();
 
 					$sql = $wpdb->prepare("SELECT owner FROM $table_name3 where name='%s'", array($room));
@@ -343,7 +343,12 @@ ENDCODE;
 					{
 						if ($rmn->no < $options['maxRooms'])
 						{
-							$sql=$wpdb->prepare("INSERT INTO `$table_name3` ( `name`, `owner`, `sdate`, `edate`, `status`, `type`) VALUES ('%s', '".$current_user->ID."', '$ztime', '0', 1, '%d')",array($room, $_POST['type']));
+							$capacity = (int) $_POST['capacity'];
+							if ($capacity > $options['capacityMax']) $capacity = $options['capacityMax'];
+
+							$type = (int) $_POST['type'];
+
+							$sql=$wpdb->prepare("INSERT INTO `$table_name3` ( `name`, `owner`, `sdate`, `edate`, `capacity`, `status`, `type`) VALUES ('%s', '".$current_user->ID."', '$ztime', '0', '%d', 1, '%d')", array($room, $capacity, $type));
 							$wpdb->query($sql);
 							$wpdb->flush();
 							$htmlCode .=  "<div class='update'>Room '$room' was created.</div>";
@@ -369,31 +374,31 @@ ENDCODE;
 				if (count($rooms))
 				{
 					$htmlCode .=  "<table>";
-					$htmlCode .=  "<tr><th>Room</th><th>Link (use to invite)</th><th>Online</th><th>Type</th><th>Manage</th></tr>";
+					$htmlCode .=  "<tr><th>Room</th><th>Link (use to invite)</th><th>Online</th><th>Capacity</th><th>Type</th><th>Manage</th></tr>";
 					$root_url = plugins_url() . "/";
 					foreach ($rooms as $rd)
 					{
 						$rm=$wpdb->get_row("SELECT count(*) as no, group_concat(username separator ' <BR> ') as users, room as room FROM `$table_name` where status='1' and type='1' AND room='".$rd->name."' GROUP BY room");
 
-						$htmlCode .=  "<tr><td><a href='" . VWvideoConference::roomURL($rd->name)."'><B>".$rd->name."</B></a></td> <td>" . VWvideoConference::roomURL($rd->name) ."</td> <td>".($rm->no>0?$rm->users:'0')."</td><td>".($rd->type==1?'Public':($rd->type==2?"Private":$rd->type))."</td> <td><a href='".$this_page.(strstr($this_page,'?')?'&':'?')."delete=".$rd->id."'>Delete</a></td> </tr>";
+						$htmlCode .=  "<tr><td><a href='" . VWvideoConference::roomURL($rd->name)."'><B>".$rd->name."</B></a></td> <td>" . VWvideoConference::roomURL($rd->name) ."</td> <td>".($rm->no>0?$rm->users:'0')."</td> <td>" . ($rd->capacity?$rd->capacity:'Default') . "</td> <td>".($rd->type==1?'Public':($rd->type==2?"Private":$rd->type))."</td> <td><a class='button btn but' href='".$this_page.(strstr($this_page,'?')?'&':'?')."delete=".$rd->id."'>Delete</a></td> </tr>";
 					}
 					$htmlCode .=  "</table>";
 
 				}
 				else $htmlCode .=  "You don't currently have any rooms.";
 
-
 				//create form
 				if (!$room)
 					if ($rmn->no < $options['maxRooms'])
 						$htmlCode .=  '<h3>Setup a New Room</h3><form method="post" action="' . $this_page .'"  name="adminForm">
-		  <input name="room" type="text" id="room" value="Room_'.base_convert((time()-1225000000),10,36).'" size="20" maxlength="64" />
-		  <select id="type" name="type">
+		  Name: <input name="room" type="text" id="room" value="Room_'.base_convert((time()-1225000000),10,36).'" size="20" maxlength="64" />
+		  <br>Access: <select id="type" name="type">
 		  <option value="2">Private</option>
 		  <option value="1">Public</option>
-		   </select>
-		  <input type="submit" name="button" id="button" value="Create" />
-		</form>All your rooms will be accessible for you in conference room list. Public rooms will be listed for everybody.
+		  </select>
+		  <br>Capacity: <input name="capacity" type="text" id="capacity" value="' . $options['capacityDefault'] . '" size="5" maxlength="8" /> Max: ' .$options['capacityMax']. '
+		  <br><input type="submit" name="button" id="button" value="Create" />
+		</form>All your rooms will be accessible for you in conference room list. Public rooms will be listed for everybody in room list.
 		'; else $htmlCode .= "You can't setup new rooms because you reached room limit (".$options['maxRooms'].").";
 			}
 
@@ -419,23 +424,23 @@ ENDCODE;
 			*/
 
 
-	//clean expired users
-	//do not clean more often than 25s (mysql table invalidate)
-	$lastClean = 0; $cleanNow = false;
-	$lastCleanFile = $options['uploadsPath'] . 'lastclean.txt';
+			//clean expired users
+			//do not clean more often than 25s (mysql table invalidate)
+			$lastClean = 0; $cleanNow = false;
+			$lastCleanFile = $options['uploadsPath'] . 'lastclean.txt';
 
-	if (file_exists($lastCleanFile)) $lastClean = file_get_contents($lastCleanFile);
-	if (!$lastClean) $cleanNow = true;
-	else if ($ztime - $lastClean > 25) $cleanNow = true;
+			if (file_exists($lastCleanFile)) $lastClean = file_get_contents($lastCleanFile);
+			if (!$lastClean) $cleanNow = true;
+			else if ($ztime - $lastClean > 25) $cleanNow = true;
 
-	if ($cleanNow)
-	{
-	if (!$options['onlineExpiration']) $options['onlineExpiration'] = 310;
-	$exptime=$ztime-$options['onlineExpiration'];
-	$sql="DELETE FROM `$table_name` WHERE edate < $exptime";
-	$wpdb->query($sql);
-	file_put_contents($lastCleanFile, $ztime);
-	}
+				if ($cleanNow)
+				{
+					if (!$options['onlineExpiration']) $options['onlineExpiration'] = 310;
+					$exptime=$ztime-$options['onlineExpiration'];
+					$sql="DELETE FROM `$table_name` WHERE edate < $exptime";
+					$wpdb->query($sql);
+					file_put_contents($lastCleanFile, $ztime);
+				}
 
 			$wpdb->flush();
 
@@ -446,23 +451,23 @@ ENDCODE;
 				else echo "<li>No active conference rooms.</li>";
 				echo "</ul>";
 
-	//landing rom
-	if ($options['landingRoom']=='username')
-	//can create
-	{
-	global $current_user;
-	get_currentuserinfo();
+			//landing rom
+			if ($options['landingRoom']=='username')
+				//can create
+				{
+				global $current_user;
+				get_currentuserinfo();
 
-	//username
-	if ($userName) if ($current_user->$userName) $username=urlencode($current_user->$userName);
-	//var_dump($current_user->$userName);
-	$username=preg_replace("/[^0-9a-zA-Z]/","-",$username);
+				//username
+				if ($userName) if ($current_user->$userName) $username=urlencode($current_user->$userName);
+					//var_dump($current_user->$userName);
+					$username=preg_replace("/[^0-9a-zA-Z]/","-",$username);
 
-	$room=$username;
-	$admin=1;
-	}
-	else $room = $options['lobbyRoom']; //or go to default
-	$permalink = VWvideoConference::roomURL($room);
+				$room=$username;
+				$admin=1;
+			}
+			else $room = $options['lobbyRoom']; //or go to default
+			$permalink = VWvideoConference::roomURL($room);
 
 			?><a href="<?php echo $permalink; ?>"><img src="<?php echo plugins_url(); ?>/videowhisper-video-conference-integration/vc/templates/conference/i_webcam.png" align="absmiddle" border="0">Enter Conference</a>
 	<?php
@@ -498,7 +503,11 @@ ENDCODE;
 
 				'canBroadcast' => 'members',
 				'broadcastList' => 'Super Admin, Administrator, Editor, Author',
+
 				'maxRooms' => '3',
+				'capacityDefault' => '50',
+				'capacityMax' => '1000',
+
 				'accessLink' => 'site',
 				'anyRoom' => '1',
 
@@ -710,6 +719,14 @@ ENDCODE;
 <h4>Room limit</h4>
 <input name="maxRooms" type="text" id="maxRooms" size="3" maxlength="3" value="<?php echo $options['maxRooms']?>"/>
 <br>Maximum number of rooms each user can have.
+
+<h4>Room Capacity (Default)</h4>
+<input name="capacityDefault" type="text" id="capacityDefault" size="5" maxlength="8" value="<?php echo $options['capacityDefault']?>"/>
+<br>Default room capacity.
+
+<h4>Maximum Room Capacity</h4>
+<input name="capacityMax" type="text" id="capacityMax" size="5" maxlength="8" value="<?php echo $options['capacityMax']?>"/>
+<br>Maximum room capacity.
 
 <h4>Page for Management</h4>
 <p>Add room management page (Page ID <a href='post.php?post=<?php echo get_option("vw_vc_page_manage"); ?>&action=edit'><?php echo get_option("vw_vc_page_manage"); ?></a>) with shortcode [videowhisper_conference_manage]</p>

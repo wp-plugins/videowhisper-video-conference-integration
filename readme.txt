@@ -7,7 +7,7 @@ Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Donate link: http://www.videowhisper.com/?p=Invest
 Tags: video, conference, chat, webcam, BuddyPress, live, on air, flash, fms, red5, wowza, audio, video chat, videochat, widget, plugin, media, av, channel, sidebar, cam, group, groups, tab, P2P, videoconference, communication, collaboration, community, meeting, remote, telepresence, videopresence, presence, online
 Requires at least: 2.7
-Tested up to: 4.0
+Tested up to: 4.1
 Stable tag: trunk
 
 This Video Conferencing web based software can easily be used with WordPress sites to implement video conference for site users.
@@ -68,6 +68,10 @@ Resulting videos can be managed and imported with [Video Share VOD](http://wordp
 More information, the latest updates, other plugins and non-WordPress editions can be found at http://www.videowhisper.com/ .
 
 == Changelog ==
+
+= 4.91.8 =
+* Room capacity can be setup per room.
+* Default and max room capacity in settings.
 
 = 4.91.6 =
 * Performance upgrades and fixes
