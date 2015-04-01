@@ -3,7 +3,7 @@
 Plugin Name: VideoWhisper Video Conference
 Plugin URI: http://www.videowhisper.com/?p=WordPress+Video+Conference
 Description: Video Conference
-Version: 4.91.8
+Version: 4.91.9
 Author: VideoWhisper.com
 Author URI: http://www.videowhisper.com/
 Contributors: videowhisper, VideoWhisper.com
