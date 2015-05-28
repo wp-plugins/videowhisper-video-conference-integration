@@ -1,5 +1,5 @@
 <?php
-$listed_rooms=array(); //keep track of duplicates
+header('Content-Type: application/xml; charset=utf-8');
 
 include("../../../../wp-config.php");
 
@@ -7,6 +7,8 @@ global $wpdb;
 
 $table_name = $wpdb->prefix . "vw_vcsessions";
 $table_name3 = $wpdb->prefix . "vw_vcrooms";
+
+
 
 
 //clean recordings
@@ -20,6 +22,8 @@ $options = VWvideoConference::getAdminOptions();
 
 $userRoom = $_COOKIE["userRoom"];
 $userRoom = sanitize_file_name($userRoom);
+
+$listed_rooms=array(); //keep track of duplicates
 
 //private room?
 if ($userRoom)  $pr = $wpdb->get_row("SELECT * FROM $table_name3 where name='$userRoom'");
